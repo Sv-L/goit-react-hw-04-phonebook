@@ -1,0 +1,36 @@
+.contacts-list,
+.contacts-text {
+  min-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  background-color: white;
+  padding: 10px;
+  height: 300px;
+  overflow: auto;
+  border-radius: 5px;
+  box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.4);
+}
+.contacts-item {
+  width: 350px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.delete-btn {
+  color: white;
+  font-weight: 500;
+  background-color: black;
+  border: none;
+  border-radius: 2px;
+  transition: scale 0.1s ease-in-out;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4);
+}
+.delete-btn:is(:hover, :focus) {
+  scale: 1.05;
+}
