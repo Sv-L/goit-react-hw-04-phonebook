@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
 import ContactList from './ContactList';
 import ContactForm from './ContactForm';
 import Filter from './Filter';
 import parseStorage from './parseStorage';
 
 export const App = () => {
+  const [filter, setFilter] = useState('');
   const [contacts, setContacts] = useState(
     () => parseStorage('contacts') ?? []
   );
-  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
@@ -19,27 +18,8 @@ export const App = () => {
     }
   }, [contacts]);
 
-  const checkName = name => {
-    const normalizeDataName = name.toLowerCase();
-    const nameIsWritten = contacts.some(
-      contact => contact.name.toLowerCase() === normalizeDataName
-    );
-    return nameIsWritten;
-  };
-
-  const formSubmitHandler = data => {
-    if (!checkName(data.name)) {
-      const newContact = { id: `${nanoid()}`, ...data };
-      setContacts(prevState => [newContact, ...prevState]);
-    } else {
-      alert(`${data.name} is already in contacts.`);
-    }
-    document.activeElement.blur();
-  };
-
-  const onChangeFilter = e => {
-    const filter = e.currentTarget.value.trim();
-    setFilter(filter);
+  const addNewContact = newContact => {
+    setContacts(prevState => [newContact, ...prevState]);
   };
 
   const deleteContact = contactId => {
@@ -48,23 +28,30 @@ export const App = () => {
     );
   };
 
-  const normalizedFilter = filter.toLowerCase();
-  const visibleContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(normalizedFilter)
-  );
+  const onChangeFilter = filter => {
+    setFilter(filter);
+  };
+
+  const filteredContacts = () => {
+    const normalizedFilter = filter.toLowerCase();
+    const visibleContacts = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+    return visibleContacts;
+  };
 
   return (
     <>
       <h1>Phonebook</h1>
       <div className="wrap">
-        <ContactForm onSubmit={formSubmitHandler} onCheckName={checkName} />
+        <ContactForm onSubmit={addNewContact} contacts={contacts} />
 
         <div>
           <h2>Contacts</h2>
           <Filter value={filter} onChange={onChangeFilter} />
           <ContactList
             filter={filter}
-            contacts={visibleContacts}
+            contacts={filteredContacts()}
             onDeleteContact={deleteContact}
           />
         </div>

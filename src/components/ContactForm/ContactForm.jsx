@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import Proptypes from 'prop-types';
 import css from './ContactForm.module.css';
+import { nanoid } from 'nanoid';
 
-const ContactForm = ({ onSubmit, onCheckName }) => {
+const ContactForm = ({ onSubmit, contacts }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -23,13 +24,26 @@ const ContactForm = ({ onSubmit, onCheckName }) => {
     }
   };
 
+  const checkNewName = name => {
+    const normalizeDataName = name.toLowerCase();
+    const nameIsWritten = contacts.some(
+      contact => contact.name.toLowerCase() === normalizeDataName
+    );
+    return nameIsWritten;
+  };
+
   const handleSubmitForm = e => {
     e.preventDefault();
-    onSubmit({ name: name, number: number });
-    if (!onCheckName(name)) {
+    if (!checkNewName(name)) {
+      const newContact = { id: `${nanoid()}`, name: name, number: number };
+      onSubmit(newContact);
       reset();
+    } else {
+      alert(`${name} is already in contacts.`);
     }
+    document.activeElement.blur();
   };
+
   const reset = () => {
     setName('');
     setNumber('');
@@ -45,7 +59,6 @@ const ContactForm = ({ onSubmit, onCheckName }) => {
           name="name"
           value={name}
           pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          // pattern="^[a-zA-Zа-яА-Я]+([ '-][a-zA-Zа-яА-Я]+)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
           onChange={handleInputChange}
@@ -72,7 +85,6 @@ const ContactForm = ({ onSubmit, onCheckName }) => {
 };
 
 ContactForm.propTypes = {
-  onCheckName: Proptypes.func.isRequired,
   onSubmit: Proptypes.func.isRequired,
 };
 

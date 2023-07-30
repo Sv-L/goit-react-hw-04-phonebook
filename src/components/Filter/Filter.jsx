@@ -2,6 +2,11 @@ import Proptypes from 'prop-types';
 import css from './Filter.module.css';
 
 const Filter = ({ value, onChange }) => {
+  const onChangeFilter = e => {
+    const filter = e.currentTarget.value.trim();
+    onChange(filter);
+  };
+
   return (
     <label className={css.label}>
       Find contacts by name
@@ -13,7 +18,7 @@ const Filter = ({ value, onChange }) => {
         pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
         title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
         required
-        onChange={onChange}
+        onChange={onChangeFilter}
       ></input>
     </label>
   );
