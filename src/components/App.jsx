@@ -6,14 +6,10 @@ import Filter from './Filter';
 import parseStorage from './parseStorage';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(
+    () => parseStorage('contacts') ?? []
+  );
   const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    if (localStorage.getItem('contacts')) {
-      setContacts(parseStorage('contacts'));
-    }
-  }, []);
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
