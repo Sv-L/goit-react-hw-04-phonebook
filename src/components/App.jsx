@@ -18,10 +18,6 @@ export const App = () => {
     );
   };
 
-  const onChangeFilter = filter => {
-    setFilter(filter);
-  };
-
   const filteredContacts = useMemo(() => {
     const normalizedFilter = filter.toLowerCase();
     return contacts.filter(contact =>
@@ -37,7 +33,7 @@ export const App = () => {
 
         <div>
           <h2>Contacts</h2>
-          <Filter value={filter} onChange={onChangeFilter} />
+          <Filter value={filter} onChange={setFilter} />
           <ContactList
             filter={filter}
             contacts={filteredContacts}
