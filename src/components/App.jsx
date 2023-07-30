@@ -1,22 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import ContactList from './ContactList';
 import ContactForm from './ContactForm';
 import Filter from './Filter';
-import parseStorage from './parseStorage';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 export const App = () => {
   const [filter, setFilter] = useState('');
-  const [contacts, setContacts] = useState(
-    () => parseStorage('contacts') ?? []
-  );
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-    if (contacts.length === 0) {
-      localStorage.removeItem('contacts');
-      setFilter('');
-    }
-  }, [contacts]);
+  const [contacts, setContacts] = useLocalStorage('contacts', []);
 
   const addNewContact = newContact => {
     setContacts(prevState => [newContact, ...prevState]);
@@ -32,13 +22,12 @@ export const App = () => {
     setFilter(filter);
   };
 
-  const filteredContacts = () => {
+  const filteredContacts = useMemo(() => {
     const normalizedFilter = filter.toLowerCase();
-    const visibleContacts = contacts.filter(contact =>
+    return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
-    return visibleContacts;
-  };
+  }, [contacts, filter]);
 
   return (
     <>
@@ -51,7 +40,7 @@ export const App = () => {
           <Filter value={filter} onChange={onChangeFilter} />
           <ContactList
             filter={filter}
-            contacts={filteredContacts()}
+            contacts={filteredContacts}
             onDeleteContact={deleteContact}
           />
         </div>
