@@ -2,11 +2,24 @@ import { useState, useMemo } from 'react';
 import ContactList from './ContactList';
 import ContactForm from './ContactForm';
 import Filter from './Filter';
+// import useLocalStorage from '../hooks/useLocalStorage';
 import useLocalStorageReducer from '../hooks/useLocalStorageReducer';
 
 export const App = () => {
   const [filter, setFilter] = useState('');
   const [contacts, dispatch] = useLocalStorageReducer([], 'contacts');
+
+  // const [contacts, setContacts] = useLocalStorage([], 'contacts');
+
+  // const addNewContact = newContact => {
+  //   setContacts(prevState => [newContact, ...prevState]);
+  // };
+
+  // const deleteContact = contactId => {
+  //   setContacts(prevState =>
+  //     prevState.filter(contact => contact.id !== contactId)
+  //   );
+  // };
 
   const filteredContacts = useMemo(() => {
     const normalizedFilter = filter.toLowerCase();
