@@ -36,7 +36,7 @@ const ContactForm = ({ onSubmit, contacts }) => {
     e.preventDefault();
     if (!checkNewName(name)) {
       const newContact = { id: `${nanoid()}`, name: name, number: number };
-      onSubmit(newContact);
+      onSubmit({ type: 'add', data: newContact });
       reset();
     } else {
       alert(`${name} is already in contacts.`);
