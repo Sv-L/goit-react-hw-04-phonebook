@@ -35,7 +35,7 @@ const ContactForm = ({ onSubmit, contacts }) => {
   const handleSubmitForm = e => {
     e.preventDefault();
     if (!checkNewName(name)) {
-      const newContact = { id: `${nanoid()}`, name: name, number: number };
+      const newContact = { id: `${nanoid()}`, name, number };
       onSubmit({ type: 'add', data: newContact });
       reset();
     } else {
